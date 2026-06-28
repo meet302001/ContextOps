@@ -38,6 +38,23 @@ s3-bucket/
 - The folder tag is `name-of-user_datetime`, where the user is the author of the
   latest git commit (the person who pushed the changes).
 
+## Examples
+
+A sample of real generated output is committed under
+[`examples/`](../examples/) so you can see what a bundle looks like without
+running the tool:
+
+```
+examples/
+  context_context-bundle/
+    meet302001_2026-06-28_010429Z/
+      context.md
+      context.json
+```
+
+Note: live `s3-bucket/` runs are git-ignored; the `examples/` copy is the only
+bundle checked into the repo.
+
 ## Security policy
 
 ContextOps is built to be safe to ship to a shared location:

@@ -1,0 +1,212 @@
+{
+  "project": "context-bundle",
+  "tool_version": "1.0.0",
+  "generated_at_utc": "2026-06-28T01:04:29+00:00",
+  "pushed_by": {
+    "name": "meet302001",
+    "email": "meetbhanushali2001@gmail.com",
+    "date": "Sat Jun 27 19:28:40 2026 -0400"
+  },
+  "git_commit": "adcffad",
+  "summary": {
+    "total_files": 11,
+    "included": 6,
+    "redacted": 3,
+    "excluded": 2,
+    "secret_findings": 7
+  },
+  "files": [
+    {
+      "path": ".env",
+      "language": "ini",
+      "status": "redacted",
+      "reason": "secret values redacted (file still included)",
+      "sha256": "41db1d7def1fded073c49a6e315ee558a13ef90642d5371c30e2efd3ef977397",
+      "size_bytes": 150,
+      "secret_findings": [
+        {
+          "type": "provider_token",
+          "line": 1,
+          "key": null,
+          "preview": "mv******6c (len=44)"
+        },
+        {
+          "type": "sentry_dsn",
+          "line": 2,
+          "key": null,
+          "preview": "ht******10 (len=45)"
+        },
+        {
+          "type": "keyed_secret",
+          "line": 3,
+          "key": "PASSWORD",
+          "preview": "Pr******12 (len=17)"
+        }
+      ],
+      "content": "OREFLOW_API_TOKEN=***REDACTED***\nSENTRY_DSN=***REDACTED***\nDB_PASSWORD=***REDACTED***\n"
+    },
+    {
+      "path": "README.md",
+      "language": "markdown",
+      "status": "included",
+      "reason": null,
+      "sha256": "e241ef7cb6e609410b4b806844314822ef442da9e5cdf5e300ca178d7bff7a73",
+      "size_bytes": 246,
+      "secret_findings": [],
+      "content": "# Oreflow — scan ingestion service\n\nInternal service that ingests FaceCapture scan exports and normalizes them for the\nanalytics pipeline. Design is in `docs/architecture.md`; code lives under `app/`.\n\nRun: `python -m app.main --input ./scans`\n"
+    },
+    {
+      "path": "app/main.py",
+      "language": "python",
+      "status": "included",
+      "reason": null,
+      "sha256": "62ca240fb8e5c064565041bd821a7c8b8dd481550e55e7f6e1aeb54cb73f9bac",
+      "size_bytes": 123,
+      "secret_findings": [],
+      "content": "from app.services.ingest import run_ingest\n\n\ndef main():\n    run_ingest(\"./scans\")\n\n\nif __name__ == \"__main__\":\n    main()\n"
+    },
+    {
+      "path": "app/services/auth.py",
+      "language": "python",
+      "status": "redacted",
+      "reason": "secret values redacted (file still included)",
+      "sha256": "1931364ea59927fe36c59331e9e60bea4ad2714bbf02e7aad1acbcf043a8580a",
+      "size_bytes": 168,
+      "secret_findings": [
+        {
+          "type": "provider_token",
+          "line": 4,
+          "key": null,
+          "preview": "mv******6c (len=44)"
+        }
+      ],
+      "content": "import requests\n\n# TODO: move this off a hardcoded token (tech debt)\nAPI_TOKEN = \"***REDACTED***\"\n\n\ndef get_token():\n    return API_TOKEN\n"
+    },
+    {
+      "path": "app/services/ingest.py",
+      "language": "python",
+      "status": "included",
+      "reason": null,
+      "sha256": "3b917fe72bb4a0bd6f80fc0763a3a7966448c46b121093862a484d75d5edee85",
+      "size_bytes": 206,
+      "secret_findings": [],
+      "content": "from app.services.auth import get_token\nfrom app.utils.io import read_scans, write_normalized\n\n\ndef run_ingest(path):\n    token = get_token()\n    scans = read_scans(path, token)\n    write_normalized(scans)\n"
+    },
+    {
+      "path": "app/utils/io.py",
+      "language": "python",
+      "status": "included",
+      "reason": null,
+      "sha256": "810c886605e4b107ddae672029aeedf34ff490af7dac37cb9c7729b7bc0e757b",
+      "size_bytes": 236,
+      "secret_findings": [],
+      "content": "import json\nimport os\n\n\ndef read_scans(path, token):\n    return [json.load(open(os.path.join(path, f))) for f in os.listdir(path)]\n\n\ndef write_normalized(scans):\n    with open(\"normalized.json\", \"w\") as fh:\n        json.dump(scans, fh)\n"
+    },
+    {
+      "path": "assets/model.bin",
+      "language": "",
+      "status": "excluded",
+      "reason": "binary",
+      "sha256": "0d99cc3e60a0d740726a58a3bad8c8a026f02366193aa261ea7fb8e78e585f98",
+      "size_bytes": 145,
+      "secret_findings": [],
+      "content": null
+    },
+    {
+      "path": "config/settings.yaml",
+      "language": "yaml",
+      "status": "redacted",
+      "reason": "secret values redacted (file still included)",
+      "sha256": "c596c84c45704e501225af0c1299c7d4c47adf76ea27370270acb3725fac3851",
+      "size_bytes": 246,
+      "secret_findings": [
+        {
+          "type": "keyed_secret",
+          "line": 6,
+          "key": "password",
+          "preview": "Pr******12 (len=17)"
+        },
+        {
+          "type": "keyed_secret",
+          "line": 8,
+          "key": "access_key_id",
+          "preview": "AK******99 (len=19)"
+        },
+        {
+          "type": "keyed_secret",
+          "line": 9,
+          "key": "secret_access_key",
+          "preview": "wJ******EY (len=39)"
+        }
+      ],
+      "content": "service: oreflow\nanalytics_bucket: s3://mvs-analytics-prod\ndatabase:\n  host: db.internal.mvs\n  user: oreflow\n  password: \"***REDACTED***\"\naws:\n  access_key_id: ***REDACTED***\n  secret_access_key: \"***REDACTED***\"\n"
+    },
+    {
+      "path": "docs/architecture.md",
+      "language": "markdown",
+      "status": "included",
+      "reason": null,
+      "sha256": "03dca41d35e774894dbcff00bd5b3404c4b82c4b738bc05f51639be13d5c4160",
+      "size_bytes": 534,
+      "secret_findings": [],
+      "content": "# Oreflow — architecture (why / what / how)\n\n**Why:** field units drop scan exports in many shapes; downstream analytics needs one\nnormalized schema. Oreflow is the seam that absorbs that variety.\n\n**What:** a small ingestion service — readers per source format, a normalizer, and a\nwriter to the analytics bucket.\n\n**How:** `app/services/ingest.py` orchestrates; `app/services/auth.py` fetches the\nupstream token; `app/utils/io.py` handles read/write. Auth currently uses a static\nservice token (tech debt — see notes-old.md).\n"
+    },
+    {
+      "path": "docs/proprietary-algorithm.md",
+      "language": "markdown",
+      "status": "excluded",
+      "reason": "confidential (marker: \"confidential\")",
+      "sha256": "64391fda000e501cfacbc11c4ef1ac62a7b37e6d63ce18f90bc48c01f2f43e81",
+      "size_bytes": 277,
+      "secret_findings": [],
+      "content": null
+    },
+    {
+      "path": "notes-old.md",
+      "language": "markdown",
+      "status": "included",
+      "reason": null,
+      "sha256": "ff036d871a2f3e632a26343b227268fd703e9cb052916064982c4def5fd97e9c",
+      "size_bytes": 216,
+      "secret_findings": [],
+      "content": "# oreflow notes (OLD — superseded by docs/architecture.md)\n\noreflow ingests scan exports and normalizes them: readers per format, a normalizer,\nwrites to the analytics bucket. (predates the arch doc; kept around.)\n"
+    }
+  ],
+  "sensitive_index": [
+    {
+      "path": ".env",
+      "type": "provider_token",
+      "line": 1
+    },
+    {
+      "path": ".env",
+      "type": "sentry_dsn",
+      "line": 2
+    },
+    {
+      "path": ".env",
+      "type": "keyed_secret",
+      "line": 3
+    },
+    {
+      "path": "app/services/auth.py",
+      "type": "provider_token",
+      "line": 4
+    },
+    {
+      "path": "config/settings.yaml",
+      "type": "keyed_secret",
+      "line": 6
+    },
+    {
+      "path": "config/settings.yaml",
+      "type": "keyed_secret",
+      "line": 8
+    },
+    {
+      "path": "config/settings.yaml",
+      "type": "keyed_secret",
+      "line": 9
+    }
+  ]
+}
